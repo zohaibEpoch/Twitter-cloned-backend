@@ -1,7 +1,7 @@
 import generateRandomString from "../util/randomString.js";
 import knexConfig from "./../knexfile.js"; // Import your knex configuration
 import knex from "knex";
-
+//commit
 const db = knex(knexConfig);
 
 // Create a new Post
