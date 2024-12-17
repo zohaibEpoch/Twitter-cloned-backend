@@ -5,7 +5,7 @@ import knex from "knex";
 const db = knex(knexConfig);
 
 // Create a new user
-const Signup = async (username, password) => {
+const signup = async (username, password) => {
   try {
     const [user] = await db("user").where("username", username);
     if (user) {
@@ -25,7 +25,7 @@ const Signup = async (username, password) => {
   }
 };
 
-const Logout = async (userId) => {
+const logout = async (userId) => {
   try {
     const rowsAffected = await db("sessions").where("user_id", userId).del();
     if (rowsAffected > 0) {
@@ -40,7 +40,7 @@ const Logout = async (userId) => {
 };
 
 // Login a user
-const LoginUser = async (username, password) => {
+const loginUser = async (username, password) => {
   try {
     const [user] = await db("user").where("username", username);
     if (!user) {
@@ -69,4 +69,4 @@ const LoginUser = async (username, password) => {
   }
 };
 
-export { Signup, LoginUser, Logout };
+export { signup, loginUser, logout };

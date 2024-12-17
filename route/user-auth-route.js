@@ -1,11 +1,23 @@
-import { LoginUser, Logout, Signup } from "../service/user-auth-service.js";
+import { loginUser, signup } from "../service/user-auth-service.js";
 
 export default async function (fastify) {
-  // Sign In function
+  // Signup User
   fastify.post("/signup", async (req, reply) => {
     const { username, password } = req.body;
+
+    if (!username || typeof username !== "string") {
+      return reply
+        .status(400)
+        .send({ message: "Invalid input: 'username' is required" });
+    }
+    if (!password || typeof password !== "string") {
+      return reply
+        .status(400)
+        .send({ message: "Invalid input: 'password' is required" });
+    }
+
     try {
-      const newUser = await Signup(username, password);
+      const newUser = await signup(username, password);
       return reply.status(201).send(newUser);
     } catch (error) {
       return reply.status(500).send({ message: error.message });
@@ -15,20 +27,21 @@ export default async function (fastify) {
   // Login User
   fastify.post("/login", async (req, reply) => {
     const { username, password } = req.body;
-    try {
-      const loginUser = await LoginUser(username, password);
-      return reply.status(200).send(loginUser);
-    } catch (error) {
-      return reply.status(500).send({ message: error.message });
-    }
-  });
-  // Logout User
-  fastify.post("/logout", async (req, reply) => {
-    const { userId } = req.body;
-    try {
-      const logoutUser = await Logout(userId);
 
-      return reply.status(200).send(logoutUser);
+    if (!username || typeof username !== "string") {
+      return reply.status(400).send({
+        message: "Invalid input: 'username' is required and must be a string.",
+      });
+    }
+    if (!password || typeof password !== "string") {
+      return reply.status(400).send({
+        message: "Invalid input: 'password' is required and must be a string.",
+      });
+    }
+
+    try {
+      const loggedInUser = await loginUser(username, password);
+      return reply.status(200).send(loggedInUser);
     } catch (error) {
       return reply.status(500).send({ message: error.message });
     }

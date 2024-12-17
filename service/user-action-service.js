@@ -1,11 +1,10 @@
-import generateRandomString from "../util/randomString.js";
-import knexConfig from "./../knexfile.js"; // Import your knex configuration
+import knexConfig from "./../knexfile.js";
 import knex from "knex";
 //commit
 const db = knex(knexConfig);
 
 // Create a new Post
-const CreatePost = async (userId, content) => {
+const createPost = async (userId, content) => {
   try {
     const [newPost] = await db("posts")
       .insert({
@@ -20,7 +19,7 @@ const CreatePost = async (userId, content) => {
   }
 };
 
-const FollowUsers = async (followerId, followeeId) => {
+const followUsers = async (followerId, followeeId) => {
   try {
     const checkFollow = await db("follows")
       .where("follower_id", followerId)
@@ -44,7 +43,7 @@ const FollowUsers = async (followerId, followeeId) => {
   }
 };
 
-const LikePost = async (userId, postId) => {
+const likePost = async (userId, postId) => {
   try {
     const [newlike] = await db("likes")
       .insert({
@@ -59,7 +58,7 @@ const LikePost = async (userId, postId) => {
   }
 };
 
-const DeletePost = async (userId, postId) => {
+const deletePost = async (userId, postId) => {
   try {
     const post = await db("posts").where("id", postId).first();
     if (!post) {
@@ -79,7 +78,7 @@ const DeletePost = async (userId, postId) => {
   }
 };
 
-const GetUserPreferencePostList = async (userId) => {
+const getUserPreferencePostList = async (userId) => {
   try {
     const posts = await db("posts")
       .leftJoin("follows", "posts.user_id", "follows.followee_id")
@@ -94,9 +93,9 @@ const GetUserPreferencePostList = async (userId) => {
 };
 
 export {
-  CreatePost,
-  FollowUsers,
-  DeletePost,
-  GetUserPreferencePostList,
-  LikePost,
+  createPost,
+  followUsers,
+  deletePost,
+  getUserPreferencePostList,
+  likePost,
 };
